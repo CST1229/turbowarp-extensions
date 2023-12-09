@@ -4146,7 +4146,7 @@
     };
     b2Settings.b2Assert = function (a) {
       if (!a) {
-        throw "Assertion Failed";
+        throw new Error("Assertion Failed");
       }
     };
     Box2D.postDefs.push(function () {
@@ -12221,8 +12221,9 @@
       }
       prev = b2Vec;
     }
-
+    if (vertices.length < 3) return false;
     fixDef.shape.SetAsArray(vertices);
+    return true;
   };
 
   const _placeBody = function (id, x, y, dir) {
@@ -12243,6 +12244,14 @@
     bodies[id] = body;
     return body;
   };
+
+  const _removeBody = function (id) {
+    if (!bodies[id]) return;
+    
+    world.DestroyBody(bodies[id]);
+    delete bodies[id];
+    delete prevPos[id];
+  }
 
   const _applyForce = function (id, ftype, x, y, dir, pow) {
     const body = bodies[id];
@@ -12444,6 +12453,19 @@
     }
   };
 
+  const _lerp = function(a, b, perc) {
+    return a + (b - a) * perc;
+  };
+
+  // Split an SVG path to the commands and numbers
+  // e,g M123 34 l 1 2 -> M, 123, 34, l, 1, 2
+  // (plus some whitespace which I filter out with array.filter())
+  const svgSplitRegex = /([\d.-]+|[A-Za-z]+)|,/g;
+
+  let tickRate = 30;
+
+  const svgUrlHeaderLength = ("data:image/svg+xml;utf8,").length;
+
   const blockIconURI =
     "data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiDQoJIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOmE9Imh0dHA6Ly9ucy5hZG9iZS5jb20vQWRvYmVTVkdWaWV3ZXJFeHRlbnNpb25zLzMuMC8iDQoJIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDBweCIgaGVpZ2h0PSI0MHB4IiB2aWV3Qm94PSItMy43IC0zLjcgNDAgNDAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgLTMuNyAtMy43IDQwIDQwIg0KCSB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxkZWZzPg0KPC9kZWZzPg0KPHJlY3QgeD0iOC45IiB5PSIxLjUiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzE2OUZCMCIgc3Ryb2tlLXdpZHRoPSIzIiB3aWR0aD0iMTQuOCIgaGVpZ2h0PSIxNC44Ii8+DQo8cmVjdCB4PSIxLjUiIHk9IjE2LjMiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzE2OUZCMCIgc3Ryb2tlLXdpZHRoPSIzIiB3aWR0aD0iMTQuOCIgaGVpZ2h0PSIxNC44Ii8+DQo8cmVjdCB4PSIxNi4zIiB5PSIxNi4zIiBmaWxsPSIjRkZGRkZGIiBzdHJva2U9IiMxNjlGQjAiIHN0cm9rZS13aWR0aD0iMyIgd2lkdGg9IjE0LjgiIGhlaWdodD0iMTQuOCIvPg0KPC9zdmc+";
   const menuIconURI =
@@ -12487,6 +12509,7 @@
         delete bodies[body];
         delete prevPos[body];
       }
+      tickRate = 30;
       // todo: delete joins?
     }
 
@@ -12593,6 +12616,17 @@
             },
             filter: [Scratch.TargetType.SPRITE],
           },
+          {
+            opcode: "disablePhysics",
+            blockType: BlockType.COMMAND,
+            text: Scratch.translate({
+              id: "griffpatch.disablePhysics",
+              default: "disable physics",
+              description: "Disable Physics for this Sprite",
+            }),
+            arguments: {},
+            filter: [Scratch.TargetType.SPRITE],
+          },
           // {
           //     opcode: 'setPhysics',
           //     blockType: BlockType.COMMAND,
@@ -12629,6 +12663,36 @@
               default: "step simulation",
               description: "Run a single tick of the physics simulation",
             }),
+          },
+          {
+            opcode: "setTickRate",
+            blockType: BlockType.COMMAND,
+            text: Scratch.translate({
+              id: "griffpatch.setTickRate",
+              default: "set simulation rate to [rate]/s",
+              description: "Set the number of physics simulation steps to run per second",
+            }),
+            arguments: {
+              rate: {
+                type: ArgumentType.NUMBER,
+                defaultValue: 30,
+              },
+            },
+          },
+          {
+            opcode: "getTickRate",
+            blockType: BlockType.REPORTER,
+            text: Scratch.translate({
+              id: "griffpatch.getTickRate",
+              default: "simulation rate",
+              description: "Get the number of physics simulation steps to run per second",
+            }),
+            arguments: {
+              rate: {
+                type: ArgumentType.NUMBER,
+                defaultValue: 30,
+              },
+            },
           },
 
           "---",
@@ -13139,7 +13203,7 @@
       return [
         { text: "this costume", value: SHAPE_TYPE_OPTIONS.COSTUME },
         { text: "this circle", value: SHAPE_TYPE_OPTIONS.CIRCLE },
-        // { text: "this polygon", value: SHAPE_TYPE_OPTIONS.SVG_POLYGON },
+        { text: "this polygon", value: SHAPE_TYPE_OPTIONS.SVG_POLYGON },
         { text: "all sprites", value: SHAPE_TYPE_OPTIONS.ALL },
       ];
     }
@@ -13219,7 +13283,7 @@
       this._checkMoved();
 
       // world.Step(1 / 30, 10, 10);
-      world.Step(1 / 30, 10, 10);
+      world.Step(1 / tickRate, 10, 10);
       world.ClearForces();
 
       for (const targetID in bodies) {
@@ -13246,6 +13310,18 @@
 
         prevPos[targetID] = { x: target.x, y: target.y, dir: target.direction };
       }
+    }
+
+    setTickRate(args) {
+      let rate = Scratch.Cast.toNumber(args.rate);
+      if (Number.isNaN(rate) || rate === Infinity) rate = 30;
+      rate = Math.max(rate, 0.01);
+
+      tickRate = rate;
+    }
+
+    getTickRate() {
+      return tickRate;
     }
 
     _checkMoved() {
@@ -13316,11 +13392,13 @@
         return;
       }
 
-      const target = util.target;
-      const body = this.setPhysicsFor(target, args.shape);
-      if (body) {
-        body.SetBullet(args.mode === "bullet");
-      }
+      try {
+        const target = util.target;
+        const body = this.setPhysicsFor(target, args.shape);
+        if (body) {
+          body.SetBullet(args.mode === "bullet");
+        }
+      } catch(e) {console.log(e)}
     }
 
     setPhysicsFor(target, shape) {
@@ -13356,15 +13434,15 @@
           (size[0] * Math.abs(scaleX) + size[1] * Math.abs(scaleY)) / 4.0 / zoom
         );
         // fixDef.shape.SetRadius((drawable.getBounds().width / 2) / zoom);
-      } else if (shape === SHAPE_TYPE_OPTIONS.SVG_POLYGON) {
-        const svg = drawable._skin._svgRenderer._svgTag;
+      } else if (shape === SHAPE_TYPE_OPTIONS.SVG_POLYGON && drawable._skin._svgImage) {
+        const svg = decodeURIComponent(drawable._skin._svgImage.src.substring(svgUrlHeaderLength));
 
         // recurse through childNodes of type 'g', looking for type 'path'
 
         const hullPoints = [];
         if (svg) {
           this._fetchPolygonPointsFromSVG(
-            svg,
+            (new DOMParser().parseFromString(svg, "image/svg+xml")).documentElement,
             hullPoints,
             offset[0],
             offset[1],
@@ -13373,8 +13451,21 @@
           );
         }
 
-        _definePolyFromHull(hullPoints[0]);
-        allHulls = hullPoints;
+        if (hullPoints.length < 1) {
+          // fallback: just act as if we used the costume option
+          const hullPoints = [];
+          for (const i in points) {
+            hullPoints.push({
+              x: (points[i][0] - offset[0]) * scaleX,
+              y: (points[i][1] - offset[1]) * scaleY,
+            });
+          }
+
+          _definePolyFromHull(hullPoints);
+        } else {
+          _definePolyFromHull(hullPoints[0]);
+          allHulls = hullPoints;
+        }
       } else {
         const hullPoints = [];
         for (const i in points) {
@@ -13400,12 +13491,16 @@
 
       if (allHulls) {
         for (let i = 1; i < allHulls.length; i++) {
-          _definePolyFromHull(allHulls[i]);
-          body.CreateFixture(fixDef);
+          if (_definePolyFromHull(allHulls[i]))
+            body.CreateFixture(fixDef);
         }
       }
 
       return body;
+    }
+
+    disablePhysics(args, util) {
+      _removeBody(util.target.id);
     }
 
     /**
@@ -13415,6 +13510,19 @@
      * @private
      */
     _fetchPolygonPointsFromSVG(svg, hullPointsList, ox, oy, scaleX, scaleY) {
+      // Costume editor costumes are offset with a matrix
+      // Just support what's required for those to work
+      if (svg.getAttribute) {
+        const transform = svg.getAttribute("transform");
+        if (transform) {
+          const match = transform.match(/matrix\(1,0,0,1,([\d.-]+),([\d.-]+)\)/i);
+          if (match) {
+            ox -= Scratch.Cast.toNumber(match[1]);
+            oy -= Scratch.Cast.toNumber(match[2]);
+          }
+        }
+      }
+
       if (svg.tagName === "g" || svg.tagName === "svg") {
         if (svg.hasChildNodes()) {
           for (const node of svg.childNodes) {
@@ -13437,29 +13545,153 @@
       // This is it boys! Get that svg data :)
       // <path xmlns="http://www.w3.org/2000/svg" d="M 1 109.7118 L 1 1.8097 L 60.3049 38.0516 L 117.9625 1.8097 L 117.9625 109.7118 L 59.8931 73.8817 Z "
       //  data-paper-data="{&quot;origPos&quot;:null}" stroke-width="2" fill="#9966ff"/>
+      
+      let fx = 0;
+      let fy = 0;
 
-      let fx;
-      let fy;
+      let px = 0;
+      let py = 0;
 
       const hullPoints = [];
-      hullPointsList.push(hullPoints);
 
-      const tokens = svg.getAttribute("d").split(" ");
+      const tokens = svg.getAttribute("d").split(svgSplitRegex).filter((f) => {
+        if (!f) return false;
+        const trimmed = f.trim();
+        return trimmed != "," && trimmed.trim().length > 0;
+      });
+
+      let token;
+      let closed = false;
       for (let i = 0; i < tokens.length; ) {
-        const token = tokens[i++];
-        if (token === "M" || token === "L") {
-          const x = Cast.toNumber(tokens[i++]);
-          const y = Cast.toNumber(tokens[i++]);
-          hullPoints.push({ x: (x - ox) * scaleX, y: (y - oy) * scaleY });
-          if (token === "M") {
+        if (!token || isNaN(tokens[i]))
+          token = tokens[i++];
+        let x, y;
+        let lineProcessed = true;
+        let addedPoint = false;
+        if (token === "M" || token === "L" || token === "m" || token === "l") {
+          lineProcessed = true;
+          x = Cast.toNumber(tokens[i++]);
+          y = Cast.toNumber(tokens[i++]);
+          if (token === "l" || token === "m") {
+            x += px;
+            y += py;
+          }
+          px = x;
+          py = y;
+          if (token === "M" || token === "m") {
             fx = x;
             fy = y;
           }
         }
-        if (token === "Z") {
-          hullPoints.push({ x: (fx - ox) * scaleX, y: (fy - oy) * scaleY });
+        if (token === "H" || token === "h") {
+          lineProcessed = true;
+          x = Cast.toNumber(tokens[i++]);
+          if (token === "H") {
+            px = x;
+          } else {
+            px += x;
+          }
         }
+        if (token === "V" || token === "v") {
+          lineProcessed = true;
+          y = Cast.toNumber(tokens[i++]);
+          if (token === "V") {
+            py = y;
+          } else {
+            py += y;
+          }
+        }
+
+        // bezier curves
+        // this is a MESS
+        if (
+          token === "C" || token === "c" || token === "S" || token === "s"
+          || token === "Q" || token === "q" || token === "T" || token === "t"
+        ) {
+          lineProcessed = true;
+          const type = token.toLowerCase();
+
+          let o1x, o1y, c1x, c1y, c2x, c2y, o2x, o2y;
+
+          o1x = px;
+          o1y = py;
+          if (type == "s" || type == "t") {
+            c1x = o1x;
+            c1y = o1y;
+          } else {
+            c1x = Cast.toNumber(tokens[i++]);
+            c1y = Cast.toNumber(tokens[i++]);
+          }
+
+          if (type == "q" || type == "t") {
+            c2x = c1x;
+            c2y = c1y;
+          } else {
+            c2x = Cast.toNumber(tokens[i++]);
+            c2y = Cast.toNumber(tokens[i++]);
+          }
+          o2x = Cast.toNumber(tokens[i++]);
+          o2y = Cast.toNumber(tokens[i++]);
+          // relative
+          if (type === token) {
+            c1x += px; c1y += py;
+            c2x += px; c2y += py;
+            o2x += px; o2y += py;
+          }
+          let l1x = o1x;
+          let l1y = o1y;
+          let l2x = c2x;
+          let l2y = c2y;
+          
+          const PRECISION = 10;
+          const dp = 1 / PRECISION;
+          for (let perc = dp; perc <= 1; perc += dp) {
+            l1x = _lerp(o1x, c1x, perc);
+            l1y = _lerp(o1y, c1y, perc);
+            l2x = _lerp(c2x, o2x, perc);
+            l2y = _lerp(c2y, o2y, perc);
+            px = _lerp(l1x, l2x, perc);
+            py = _lerp(l1y, l2y, perc);
+
+            hullPoints.push({ x: (px - ox) * scaleX, y: (py - oy) * scaleY });
+          }
+
+          addedPoint = true;
+        }
+        if (token === "A" || token === "a") {
+          lineProcessed = true;
+          i += 5;
+          x = Cast.toNumber(tokens[i++]);
+          y = Cast.toNumber(tokens[i++]);
+          if (token === "a") {
+            px += x;
+            py += y;
+          } else {
+            px = x;
+            py = y;
+          }
+        }
+
+        if (token === "Z" || token === "z") {
+          lineProcessed = true;
+          closed = true;
+          px = fy;
+          py = fy;
+        }
+
+        if (!lineProcessed) i++;
+
+        if (!addedPoint) hullPoints.push({ x: (px - ox) * scaleX, y: (py - oy) * scaleY });
       }
+
+      if (!closed) {
+        px = fy;
+        py = fy;
+        hullPoints.push({ x: (px - ox) * scaleX, y: (py - oy) * scaleY });
+      }
+
+      if (hullPoints.length > 2)
+        hullPointsList.push(hullPoints);
     }
 
     applyForce(args, util) {
