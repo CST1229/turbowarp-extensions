@@ -12247,11 +12247,11 @@
 
   const _removeBody = function (id) {
     if (!bodies[id]) return;
-    
+
     world.DestroyBody(bodies[id]);
     delete bodies[id];
     delete prevPos[id];
-  }
+  };
 
   const _applyForce = function (id, ftype, x, y, dir, pow) {
     const body = bodies[id];
@@ -12461,10 +12461,10 @@
   // e,g M123 34 l 1 2 -> M, 123, 34, l, 1, 2
   // (plus some whitespace which I filter out with array.filter())
   const svgSplitRegex = /([\d.-]+|[A-Za-z]+)|,/g;
+  const svgUrlHeaderLength = ("data:image/svg+xml;utf8,").length;
 
   let tickRate = 30;
 
-  const svgUrlHeaderLength = ("data:image/svg+xml;utf8,").length;
 
   const blockIconURI =
     "data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiDQoJIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOmE9Imh0dHA6Ly9ucy5hZG9iZS5jb20vQWRvYmVTVkdWaWV3ZXJFeHRlbnNpb25zLzMuMC8iDQoJIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDBweCIgaGVpZ2h0PSI0MHB4IiB2aWV3Qm94PSItMy43IC0zLjcgNDAgNDAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgLTMuNyAtMy43IDQwIDQwIg0KCSB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxkZWZzPg0KPC9kZWZzPg0KPHJlY3QgeD0iOC45IiB5PSIxLjUiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzE2OUZCMCIgc3Ryb2tlLXdpZHRoPSIzIiB3aWR0aD0iMTQuOCIgaGVpZ2h0PSIxNC44Ii8+DQo8cmVjdCB4PSIxLjUiIHk9IjE2LjMiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzE2OUZCMCIgc3Ryb2tlLXdpZHRoPSIzIiB3aWR0aD0iMTQuOCIgaGVpZ2h0PSIxNC44Ii8+DQo8cmVjdCB4PSIxNi4zIiB5PSIxNi4zIiBmaWxsPSIjRkZGRkZGIiBzdHJva2U9IiMxNjlGQjAiIHN0cm9rZS13aWR0aD0iMyIgd2lkdGg9IjE0LjgiIGhlaWdodD0iMTQuOCIvPg0KPC9zdmc+";
@@ -12621,7 +12621,7 @@
             blockType: BlockType.COMMAND,
             text: Scratch.translate({
               id: "griffpatch.disablePhysics",
-              default: "disable physics",
+              default: "disable physics for this sprite",
               description: "Disable Physics for this Sprite",
             }),
             arguments: {},
@@ -12670,7 +12670,8 @@
             text: Scratch.translate({
               id: "griffpatch.setTickRate",
               default: "set simulation rate to [rate]/s",
-              description: "Set the number of physics simulation steps to run per second",
+              description:
+                "Set the number of physics simulation steps to run per second",
             }),
             arguments: {
               rate: {
@@ -12685,14 +12686,9 @@
             text: Scratch.translate({
               id: "griffpatch.getTickRate",
               default: "simulation rate",
-              description: "Get the number of physics simulation steps to run per second",
+              description:
+                "Get the number of physics simulation steps to run per second",
             }),
-            arguments: {
-              rate: {
-                type: ArgumentType.NUMBER,
-                defaultValue: 30,
-              },
-            },
           },
 
           "---",

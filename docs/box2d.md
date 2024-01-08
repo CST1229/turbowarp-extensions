@@ -66,6 +66,14 @@ Makes physics no longer apply to this sprite.
 ---
 
 ```scratch
+disable physics for this sprite :: #0FBD8C
+```
+
+Makes physics no longer apply to this sprite.
+
+---
+
+```scratch
 go to x: [0] y: [0] [in world v] :: #0FBD8C
 ```
 
