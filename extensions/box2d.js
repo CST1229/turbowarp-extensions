@@ -12221,6 +12221,9 @@
       }
       prev = b2Vec;
     }
+    if (vertices.length >= 2 && b2Math.SubtractVV(vertices[0], vertices[vertices.length - 1]).LengthSquared() <= Number.MIN_VALUE) {
+      vertices.splice(vertices.length - 1, 1);
+    }
     if (vertices.length < 3) return false;
     fixDef.shape.SetAsArray(vertices);
     return true;
