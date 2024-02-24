@@ -670,7 +670,7 @@
       if (variables.length > 0) {
         return variables;
       } else {
-        return [{ text: "", value: "" }];
+        return [{ text: "(no sprite-only variables)", value: "" }];
       }
     }
   }
