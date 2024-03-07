@@ -196,12 +196,16 @@
     );
   };
 
-  const oldPick = vm.renderer.pick;
-  vm.renderer.pick = function (x, y) {
-    return oldPick.call(
+  const oldCS2SB = vm.renderer.clientSpaceToScratchBounds;
+  vm.renderer.clientSpaceToScratchBounds = function (centerX, centerY, touchWidth, touchHeight) {
+    const gl = Scratch.renderer.gl;
+    const clientToScratchX = gl.canvas.clientWidth / Scratch.renderer._nativeSize[0];
+    const clientToScratchY = gl.canvas.clientHeight / Scratch.renderer._nativeSize[1];
+    return oldCS2SB.call(
       this,
-      translateX(x, true, 1, true, y, -1),
-      translateY(y, true, -1, true, x, 1)
+      translateX(centerX, false, clientToScratchX, true, centerY, -clientToScratchY),
+      translateY(centerY, false, -clientToScratchY, true, centerX, clientToScratchX),
+      touchWidth, touchHeight
     );
   };
 
