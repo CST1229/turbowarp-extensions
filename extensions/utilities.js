@@ -337,7 +337,7 @@
 
     parseJSON({ PATH, JSON_STRING }) {
       try {
-        const path = PATH.toString()
+        const path = Scratch.Cast.toString(PATH)
           .split("/")
           .map((prop) => decodeURIComponent(prop));
         if (path[0] === "") path.splice(0, 1);
@@ -367,7 +367,7 @@
     }
 
     regexReplace({ STRING, REGEX, NEWSTRING }) {
-      return STRING.toString().replace(new RegExp(REGEX, "gi"), NEWSTRING);
+      return Scratch.Cast.toString(STRING).replace(new RegExp(REGEX, "gi"), NEWSTRING);
     }
   }
 
