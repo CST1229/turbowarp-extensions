@@ -760,6 +760,8 @@
         }
         if (typeof result == "object") {
           return JSON.stringify(result);
+        } else if (result === undefined) {
+          return "undefined";
         } else {
           return result;
         }
