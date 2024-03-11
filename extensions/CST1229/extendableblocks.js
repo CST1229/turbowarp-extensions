@@ -2,7 +2,6 @@
 // ID: cst1229extendable
 // Description: Blocks with a variable number of inputs.
 // By: CST1229 <https://scratch.mit.edu/users/CST1229/>
-// License: LGPL-3.0
 
 (function (Scratch) {
   "use strict";
@@ -23,7 +22,11 @@
     getInfo() {
       return {
         id: exId,
-        name: "Extendable Blocks",
+        name: Scratch.translate({
+          id: "cst1229extendable.name",
+          default: "Extendable Blocks",
+          description: "Extension name."
+        }),
         menuIconURI: menuIconURI,
         blocks: [
           {
@@ -33,12 +36,12 @@
               id: "cst1229extendable.join",
               default: "join",
               description:
-                "Part of the extendable join block. Text inputs follow after this",
+                "Part of the extendable join block. Text inputs follow after this"
             }),
             arguments: {},
             mutator: "cst_extendable",
             extensions: ["colours_operators", "cst_extendable_string"],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendSum",
@@ -51,9 +54,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_number",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendMinus",
@@ -64,9 +67,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_number",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendProduct",
@@ -77,9 +80,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_number",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendDivide",
@@ -90,9 +93,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_number",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           "---",
           {
@@ -104,9 +107,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_boolean",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendOr",
@@ -117,9 +120,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_boolean",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendLess",
@@ -130,9 +133,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_string",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendEqual",
@@ -143,9 +146,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_string",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           {
             opcode: "extendGreater",
@@ -156,9 +159,9 @@
             extensions: [
               "colours_operators",
               "cst_extendable_string",
-              "cst_extendable_clear",
+              "cst_extendable_clear"
             ],
-            disableMonitor: true,
+            disableMonitor: true
           },
           "---",
           {
@@ -168,12 +171,12 @@
               id: "cst1229extendable.createjsonarray",
               default: "create json array",
               description:
-                "Part of the create JSON array block. Text inputs follow after this",
+                "Part of the create JSON array block. Text inputs follow after this"
             }),
             arguments: {},
             mutator: "cst_extendable",
             extensions: ["colours_operators", "cst_extendable_string"],
-            disableMonitor: true,
+            disableMonitor: true
           },
           "---",
           {
@@ -183,17 +186,17 @@
               id: "cst1229extendable.runbranch",
               default: "run branch [BRANCH] of",
               description:
-                "Part of the run branch of block. C block inputs follow after this",
+                "Part of the run branch of block. C block inputs follow after this"
             }),
             arguments: {
               BRANCH: {
                 type: Scratch.ArgumentType.NUMBER,
-                defaultValue: 1,
-              },
+                defaultValue: 1
+              }
             },
             branchCount: MAX_EXTENDABLE_BRANCHES,
             mutator: "cst_extendable",
-            extensions: ["colours_control", "cst_extendable_branch"],
+            extensions: ["colours_control", "cst_extendable_branch"]
           },
           {
             opcode: "extendIf",
@@ -201,11 +204,11 @@
             text: Scratch.translate({
               id: "cst1229extendable.if",
               default: "if",
-              description: "Part of the extendable if block",
+              description: "Part of the extendable if block"
             }),
             branchCount: MAX_EXTENDABLE_BRANCHES,
             mutator: "cst_extendable",
-            extensions: ["colours_control", "cst_extendable_if"],
+            extensions: ["colours_control", "cst_extendable_if"]
           },
           {
             opcode: "extendIfElse",
@@ -213,11 +216,11 @@
             text: Scratch.translate({
               id: "cst1229extendable.ifelseif",
               default: "if",
-              description: "Part of the extendable if-else block",
+              description: "Part of the extendable if-else block"
             }),
             branchCount: MAX_EXTENDABLE_BRANCHES,
             mutator: "cst_extendable",
-            extensions: ["colours_control", "cst_extendable_if_else"],
+            extensions: ["colours_control", "cst_extendable_if_else"]
           },
           {
             opcode: "extendSwitch",
@@ -225,19 +228,19 @@
             text: Scratch.translate({
               id: "cst1229extendable.switch",
               default: "switch [VALUE]",
-              description: "Part of the extendable switch block",
+              description: "Part of the extendable switch block"
             }),
             arguments: {
               VALUE: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: "",
-              },
+                defaultValue: ""
+              }
             },
             branchCount: MAX_EXTENDABLE_BRANCHES,
             mutator: "cst_extendable",
-            extensions: ["colours_control", "cst_extendable_switch"],
-          },
-        ],
+            extensions: ["colours_control", "cst_extendable_switch"]
+          }
+        ]
       };
     }
 
@@ -311,6 +314,7 @@
     }
 
     extendArray(args, util) {
+      let i = 0;
       const prefix = "ARG";
       const array = [];
 
@@ -445,6 +449,9 @@
     if (blockInfo.mutator) {
       res.json.mutator = blockInfo.mutator;
     }
+    if (blockInfo.extensions) {
+      res.json.extensions = blockInfo.extensions;
+    }
     return res;
   };
 
@@ -519,11 +526,11 @@
         isExtendableInput(input) {
           return (
             input.name.startsWith("ARROW_") ||
-            this.extendableDefs.some((def) => input.name.startsWith(def.id)) ||
-            this.extendableDefsStart.some((def) =>
+            this.extendableDefs.some(def => input.name.startsWith(def.id)) ||
+            this.extendableDefsStart.some(def =>
               input.name.startsWith(def.id)
             ) ||
-            this.extendableDefsEnd.some((def) => input.name.startsWith(def.id))
+            this.extendableDefsEnd.some(def => input.name.startsWith(def.id))
           );
         },
 
@@ -536,7 +543,7 @@
               const target = input.connection.targetBlock();
               const saveInfo = {
                 shadow: input.connection.getShadowDom(),
-                block: target,
+                block: target
               };
               connectionMap[input.name] = saveInfo;
 
@@ -553,7 +560,7 @@
         },
 
         removeAllInputs_() {
-          this.inputList = this.inputList.filter((input) => {
+          this.inputList = this.inputList.filter(input => {
             if (
               this.isExtendableInput(input) ||
               (input.type === ScratchBlocks.DUMMY_INPUT && this.clearLabels)
@@ -636,7 +643,7 @@
           const vmBlock = blocks.getBlock(this.id);
           if (!vmBlock) return;
 
-          const usedInputs = new Set(this.inputList.map((i) => i?.name));
+          const usedInputs = new Set(this.inputList.map(i => i?.name));
 
           const inputs = vmBlock.inputs;
           for (const name of Object.keys(inputs)) {
@@ -700,7 +707,7 @@
                 def.id,
                 this.inputCount + plusInputs - 1
               );
-              const input = this.inputList.find((i) => i.name == name);
+              const input = this.inputList.find(i => i.name == name);
               if (input && input.connection && input.connection.isConnected()) {
                 const block = input.connection.targetBlock();
                 block.unplug();
@@ -714,7 +721,7 @@
           }
           this.updateDisplay_();
           for (const name of Object.keys(reconnect)) {
-            const input = this.inputList.find((i) => i.name == name);
+            const input = this.inputList.find(i => i.name == name);
             const block = reconnect[name];
             if (input && input.connection && block.workspace) {
               if (block.outputConnection)
@@ -750,7 +757,7 @@
                 def.id,
                 this.inputCount + plusInputs + 1
               );
-              const input = this.inputList.find((i) => i.name == name);
+              const input = this.inputList.find(i => i.name == name);
               if (input && input.connection && input.connection.isConnected()) {
                 const block = input.connection.targetBlock();
                 block.unplug();
@@ -769,7 +776,7 @@
           }
           this.updateDisplay_();
           for (const name of Object.keys(reconnect)) {
-            const input = this.inputList.find((i) => i.name == name);
+            const input = this.inputList.find(i => i.name == name);
             const block = reconnect[name];
             if (input && input.connection && block.workspace) {
               if (block.outputConnection)
@@ -881,7 +888,7 @@
           }
 
           if (this.isInFlyout) ScratchBlocks.Events.enable();
-        },
+        }
       },
       function () {
         // An array of extendable input definitions;
@@ -920,12 +927,12 @@
     });
     ScratchBlocks.Extensions.register("cst_extendable_string", function () {
       this.extendableDefs = [
-        createInput(ScratchBlocks.INPUT_VALUE, "ARG", null, "text", "TEXT", ""),
+        createInput(ScratchBlocks.INPUT_VALUE, "ARG", null, "text", "TEXT", "")
       ];
       const ops = {
         [exId + "_extendLess"]: "<",
         [exId + "_extendEqual"]: "=",
-        [exId + "_extendGreater"]: ">",
+        [exId + "_extendGreater"]: ">"
       };
       if (this.type in ops) {
         const op = ops[this.type];
@@ -937,7 +944,7 @@
             "text",
             "TEXT",
             ""
-          ),
+          )
         ];
         this.extendableDefs.unshift(
           createInput(ScratchBlocks.DUMMY_INPUT, "WORD", op)
@@ -948,7 +955,7 @@
     ScratchBlocks.Extensions.register("cst_extendable_number", function () {
       const defaultValue = [
         exId + "_extendProduct",
-        exId + "_extendDivide",
+        exId + "_extendDivide"
       ].includes(this.type)
         ? "1"
         : "0";
@@ -961,7 +968,7 @@
           "math_number",
           "NUM",
           defaultValue
-        ),
+        )
       ];
       this.minInputs = 1;
 
@@ -969,7 +976,7 @@
         [exId + "_extendSum"]: "+",
         [exId + "_extendMinus"]: "-",
         [exId + "_extendProduct"]: "*",
-        [exId + "_extendDivide"]: "/",
+        [exId + "_extendDivide"]: "/"
       };
       if (ops[this.type]) {
         this.extendableDefsStart = [
@@ -980,7 +987,7 @@
             "math_number",
             "NUM",
             defaultValue
-          ),
+          )
         ];
         this.extendableDefs.unshift(
           createInput(ScratchBlocks.DUMMY_INPUT, "WORD", ops[this.type])
@@ -990,20 +997,30 @@
     });
     ScratchBlocks.Extensions.register("cst_extendable_boolean", function () {
       this.extendableDefs = [
-        createInput(ScratchBlocks.INPUT_VALUE, "ARG", "Boolean"),
+        createInput(ScratchBlocks.INPUT_VALUE, "ARG", "Boolean")
       ];
       if (
         this.type === exId + "_extendAnd" ||
         this.type === exId + "_extendOr"
       ) {
         this.extendableDefsStart = [
-          createInput(ScratchBlocks.INPUT_VALUE, "ARG", "Boolean"),
+          createInput(ScratchBlocks.INPUT_VALUE, "ARG", "Boolean")
         ];
         this.extendableDefs.unshift(
           createInput(
             ScratchBlocks.DUMMY_INPUT,
             "WORD",
-            this.type === exId + "_extendAnd" ? "and" : "or"
+            this.type === exId + "_extendAnd"
+              ? Scratch.translate({
+                  id: "cst1229extendable.and",
+                  default: "and",
+                  description: "And word"
+                })
+              : Scratch.translate({
+                  id: "cst1229extendable.or",
+                  default: "or",
+                  description: "Or word"
+                })
           )
         );
         this.inputCount = 1;
@@ -1011,21 +1028,45 @@
     });
     ScratchBlocks.Extensions.register("cst_extendable_branch", function () {
       this.extendableDefs = [
-        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
+        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null)
       ];
       this.inputCount = 1;
     });
     ScratchBlocks.Extensions.register("cst_extendable_if", function () {
       this.extendableDefsStart = [
         createInput(ScratchBlocks.INPUT_VALUE, "CONDITION", "Boolean"),
-        createInput(ScratchBlocks.DUMMY_INPUT, "THEN_WORD", "then"),
-        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "THEN_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.then",
+            default: "then",
+            description: "Then word"
+          })
+        ),
+        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null)
       ];
       this.extendableDefs = [
-        createInput(ScratchBlocks.DUMMY_INPUT, "ELSE_WORD", "else if"),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "ELSE_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.elseif",
+            default: "else if",
+            description: "Else if word"
+          })
+        ),
         createInput(ScratchBlocks.INPUT_VALUE, "CONDITION", "Boolean"),
-        createInput(ScratchBlocks.DUMMY_INPUT, "THEN_WORD", "then"),
-        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "THEN_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.then",
+            default: "then",
+            description: "Then word"
+          })
+        ),
+        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null)
       ];
       this.inputCount = 0;
       this.minInputs = 0;
@@ -1033,26 +1074,74 @@
     ScratchBlocks.Extensions.register("cst_extendable_if_else", function () {
       this.extendableDefsStart = [
         createInput(ScratchBlocks.INPUT_VALUE, "CONDITION", "Boolean"),
-        createInput(ScratchBlocks.DUMMY_INPUT, "THEN_WORD", "then"),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "THEN_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.then",
+            default: "then",
+            description: "Then word"
+          })
+        ),
         createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
-        createInput(ScratchBlocks.DUMMY_INPUT, "ELSE_WORD", "else"),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "ELSE_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.else",
+            default: "else",
+            description: "Else word"
+          })
+        )
       ];
       this.extendableDefs = [
-        createInput(ScratchBlocks.DUMMY_INPUT, "IF_WORD", "if"),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "IF_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.if",
+            default: "if",
+            description: "If word"
+          })
+        ),
         createInput(ScratchBlocks.INPUT_VALUE, "CONDITION", "Boolean"),
-        createInput(ScratchBlocks.DUMMY_INPUT, "THEN_WORD", "then"),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "THEN_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.then",
+            default: "then",
+            description: "Then word"
+          })
+        ),
         createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
-        createInput(ScratchBlocks.DUMMY_INPUT, "ELSE_WORD", "else"),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "ELSE_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.else",
+            default: "else",
+            description: "Else word"
+          })
+        )
       ];
       this.extendableDefsEnd = [
-        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
+        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null)
       ];
       this.inputCount = 0;
       this.minInputs = 0;
     });
     ScratchBlocks.Extensions.register("cst_extendable_switch", function () {
       this.extendableDefs = [
-        createInput(ScratchBlocks.DUMMY_INPUT, "CASE_WORD", "case"),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "CASE_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.case",
+            default: "case",
+            description: "Case word"
+          })
+        ),
         createInput(
           ScratchBlocks.INPUT_VALUE,
           "CASE_VALUE",
@@ -1061,11 +1150,19 @@
           "TEXT",
           ""
         ),
-        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
+        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null)
       ];
       this.extendableDefsEnd = [
-        createInput(ScratchBlocks.DUMMY_INPUT, "DEFAULT_WORD", "default"),
-        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null),
+        createInput(
+          ScratchBlocks.DUMMY_INPUT,
+          "DEFAULT_WORD",
+          Scratch.translate({
+            id: "cst1229extendable.default",
+            default: "default",
+            description: "Default word"
+          })
+        ),
+        createInput(ScratchBlocks.NEXT_STATEMENT, "SUBSTACK", null)
       ];
       this.inputCount = 1;
       this.minInputs = 0;
