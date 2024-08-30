@@ -16,11 +16,261 @@
   const menuIconURI =
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhodG1sPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDQwIDQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxOCIgZmlsbD0iIzU5YzA1OSIgc3Ryb2tlPSIjMzg5NDM4IiBzdHJva2Utd2lkdGg9IjQiIHBhaW50LW9yZGVyPSJzdHJva2UgbWFya2VycyBmaWxsIiBzdHlsZT0iZm9udC12YXJpYXRpb24tc2V0dGluZ3M6bm9ybWFsIi8+PGltYWdlIHhsaW5rOmhyZWY9ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QmtZWFJoTFc1aGJXVTlJa3hoZVdWeUlERWlJSGh0Ykc1elBTSm9kSFJ3T2k4dmQzZDNMbmN6TG05eVp5OHlNREF3TDNOMlp5SWdkbWxsZDBKdmVEMGlNQ0F3SURFd0lERXpJaUIwY21GdWMyWnZjbTA5SW5OallXeGxLQzB4TENBeEtTSStQSEJoZEdnZ1pEMGlUVE11TmpVdU1UUTFZVEl1TkRFZ01pNDBNU0F3SURBZ01TQXhMamN5TGpjeGJETXVPVElnTXk0NU1tRXlMalExSURJdU5EVWdNQ0F3SURFZ01DQXpMalExYkMwekxqa3lJRE11T1RGaE1pNDBNaUF5TGpReUlEQWdNQ0F4TFRFdU56SXVOeklnTWk0ME9DQXlMalE0SURBZ01DQXhMVEV1TnpNdExqY3hZeTB1TWpRdExqSTVMUzQzTVMwdU56SXRMamN4TFRVdU5qVWdNQzAwTGprekxqUTJMVFV1TXprdU56RXROUzQyTkdFeUxqUTBJREl1TkRRZ01DQXdJREVnTVM0M015MHVOekY2SWlCbWFXeHNQU0lqTWpNeFpqSXdJaUJ2Y0dGamFYUjVQU0l1TVNJdlBqeHdZWFJvSUdROUlrMDRMams0TlNBMkxqVXhZVEV1TkRNZ01TNDBNeUF3SURBZ01TMHVORElnTVd3dE15NDVNaUF6TGprMFlURXVORFFnTVM0ME5DQXdJREFnTVMweUlEQmpMUzQxTmkwdU5UWXRMalUyTFRrdU16RWdNQzA1TGpnM1lURXVORFFnTVM0ME5DQXdJREFnTVNBeUlEQnNNeTQ1TWlBekxqa3lZVEV1TkRNZ01TNDBNeUF3SURBZ01TQXVORElnTVM0d01Yb2lJR1pwYkd3OUlpTm1abVlpTHo0OEwzTjJaejQ9IiB3aWR0aD0iMTYiIGhlaWdodD0iMzIiIHg9IjQiIHk9IjQiLz48aW1hZ2UgeGxpbms6aHJlZj0iZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCa1lYUmhMVzVoYldVOUlreGhlV1Z5SURFaUlIaHRiRzV6UFNKb2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1EQXdMM04yWnlJZ2RtbGxkMEp2ZUQwaU1DQXdJREV3SURFeklqNDhjR0YwYUNCa1BTSk5NeTQyTlM0eE5EVmhNaTQwTVNBeUxqUXhJREFnTUNBeElERXVOekl1TnpGc015NDVNaUF6TGpreVlUSXVORFVnTWk0ME5TQXdJREFnTVNBd0lETXVORFZzTFRNdU9USWdNeTQ1TVdFeUxqUXlJREl1TkRJZ01DQXdJREV0TVM0M01pNDNNaUF5TGpRNElESXVORGdnTUNBd0lERXRNUzQzTXkwdU56RmpMUzR5TkMwdU1qa3RMamN4TFM0M01pMHVOekV0TlM0Mk5TQXdMVFF1T1RNdU5EWXROUzR6T1M0M01TMDFMalkwWVRJdU5EUWdNaTQwTkNBd0lEQWdNU0F4TGpjekxTNDNNWG9pSUdacGJHdzlJaU15TXpGbU1qQWlJRzl3WVdOcGRIazlJaTR4SWk4K1BIQmhkR2dnWkQwaVRUZ3VPVGcxSURZdU5URmhNUzQwTXlBeExqUXpJREFnTUNBeExTNDBNaUF4YkMwekxqa3lJRE11T1RSaE1TNDBOQ0F4TGpRMElEQWdNQ0F4TFRJZ01HTXRMalUyTFM0MU5pMHVOVFl0T1M0ek1TQXdMVGt1T0RkaE1TNDBOQ0F4TGpRMElEQWdNQ0F4SURJZ01Hd3pMamt5SURNdU9USmhNUzQwTXlBeExqUXpJREFnTUNBeElDNDBNaUF4TGpBeGVpSWdabWxzYkQwaUkyWm1aaUl2UGp3dmMzWm5QZz09IiB3aWR0aD0iMTYiIGhlaWdodD0iMzIiIHg9IjIwIiB5PSI0Ii8+PC9zdmc+";
 
+  const vm = Scratch.vm;
+  const runtime = vm.runtime;
+  
+	const patch = (obj, functions) => {
+		for (const name in functions) {
+			const original = obj[name];
+			if (original) {
+				obj[name] = function(...args) {
+					const callOriginal = (...args) => original.call(this, ...args);
+					return functions[name].call(this, callOriginal, ...args);
+				};
+			} else {
+				obj[name] = function (...args) {
+					return functions[name].call(this, () => {}, ...args);
+				}
+			}
+		}
+	}
+
+  function getExtendableInput(prefix, index) {
+    // Special handling for substacks,
+    // as their names matter for execution
+    if (prefix === "SUBSTACK") {
+      return index > 0 ? (prefix + (index + 1)) : prefix;
+    }
+    return prefix + index;
+  }
+
+	try {
+    // @ts-ignore
+		const compilerExports = vm.exports.i_will_not_ask_for_help_when_these_break();
+		const {JSGenerator, ScriptTreeGenerator} = compilerExports;
+		const {Frame, TypedInput, TYPE_UNKNOWN, TYPE_STRING, TYPE_BOOLEAN, TYPE_NUMBER_NAN} = JSGenerator.unstable_exports;
+		
+		//const {Thread} = vm.exports;
+		
+    const descendExtendable = (that, block, extraInputs = 0, argName = "ARG") => {
+      return new Array(+block.mutation.inputcount + extraInputs).fill().map((_, i) => that.descendInputOfBlock(block, argName + i))
+    }
+    const descendExtendableSubstack = (that, block, extraInputs = 0) => {
+      return new Array(+block.mutation.inputcount + extraInputs).fill().map((_, i) => that.descendSubstack(block, getExtendableInput("SUBSTACK", i)))
+    }
+
+    // @ts-ignore
+    vm.runtime.extendable_compareEq = (compare, ...args) => {
+      for (let i = 0; i < args.length - 1; i++) {
+        if (!compare(args[i], args[i + 1])) return false;
+      }
+      return true;
+    }
+
+		patch(ScriptTreeGenerator.prototype, {
+			descendStackedBlock(original, block) {
+				if (block.opcode === (exId + "_runBranch")) {
+					return {
+						kind: exId + ".runBranch",
+            branch: this.descendInputOfBlock(block, "BRANCH"),
+            substacks: descendExtendableSubstack(this, block),
+					};
+				} else if (block.opcode === (exId + "_extendIf")) {
+					return {
+						kind: exId + ".if",
+            conditions: descendExtendable(this, block, 1, "CONDITION"),
+            substacks: descendExtendableSubstack(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendIfElse")) {
+					return {
+						kind: exId + ".ifelse",
+            conditions: descendExtendable(this, block, 1, "CONDITION"),
+            substacks: descendExtendableSubstack(this, block, 2),
+					};
+				} else if (block.opcode === (exId + "_extendSwitch")) {
+					return {
+						kind: exId + ".switch",
+            value: this.descendInputOfBlock(block, "VALUE"),
+            cases: descendExtendable(this, block, 0, "CASE_VALUE"),
+            substacks: descendExtendableSubstack(this, block, 1),
+					};
+				}
+        return original(block);
+			},
+			descendInput(original, block) {
+				if (block.opcode === (exId + "_extendJoin")) {
+					return {
+						kind: exId + ".join",
+            args: descendExtendable(this, block),
+					};
+				} else if (block.opcode === (exId + "_extendSum")) {
+					return {
+						kind: exId + ".sum",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendMinus")) {
+					return {
+						kind: exId + ".minus",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendProduct")) {
+					return {
+						kind: exId + ".product",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendDivide")) {
+					return {
+						kind: exId + ".divide",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendAnd")) {
+					return {
+						kind: exId + ".and",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendOr")) {
+					return {
+						kind: exId + ".or",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendEqual")) {
+					return {
+						kind: exId + ".equal",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendGreater")) {
+					return {
+						kind: exId + ".greater",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendLess")) {
+					return {
+						kind: exId + ".less",
+            args: descendExtendable(this, block, 1),
+					};
+				} else if (block.opcode === (exId + "_extendArray")) {
+					return {
+						kind: exId + ".array",
+            args: descendExtendable(this, block),
+					};
+				}
+				return original(block);
+			},
+		});
+		
+		patch(JSGenerator.prototype, {
+			descendStackedBlock(original, node) {
+				if (node.kind === (exId + ".runBranch")) {
+					this.source += `switch (${this.descendInput(node.branch).asNumber()}) {\n`;
+          for (let i = 0; i < node.substacks.length; i++) {
+            this.source += `case ${i + 1}: {\n`;
+            this.descendStack(node.substacks[i], new Frame(false));
+            this.source += `break;}\n`;
+          }
+					this.source += `}\n`;
+				} else if (node.kind === (exId + ".if") || node.kind === (exId + ".ifelse")) {
+          for (let i = 0; i < node.conditions.length; i++) {
+            if (i > 0) this.source += "else "
+            this.source += `if (${this.descendInput(node.conditions[i]).asBoolean()}) {\n`;
+            this.descendStack(node.substacks[i], new Frame(false));
+            this.source += `}\n`;
+          }
+          if (node.kind === (exId + ".ifelse")) {
+            this.source += `else {\n`;
+            this.descendStack(node.substacks[node.conditions.length], new Frame(false));
+            this.source += `}\n`;
+          }
+				} else if (node.kind === (exId + ".switch")) {
+          this.source += `switch (${this.descendInput(node.value).asSafe()}) {\n`;
+
+          for (let i = 0; i < node.cases.length; i++) {
+            this.source += `case (${this.descendInput(node.cases[i]).asSafe()}): {\n`
+            this.descendStack(node.substacks[i], new Frame(false));
+            this.source += `break;}\n`;
+          }
+          this.source += `default: {\n`
+          this.descendStack(node.substacks[node.cases.length], new Frame(false));
+          this.source += `break;}\n`;
+
+          this.source += `}\n`;
+				} else {
+					original(node);
+				}
+			},
+			descendInput(original, node) {
+				if (node.kind === (exId + ".join")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asString()).join(" + ") + ")",
+            TYPE_STRING
+          );
+				} else if (node.kind === (exId + ".sum")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" + ") + ")",
+            TYPE_NUMBER_NAN
+          );
+				} else if (node.kind === (exId + ".minus")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" - ") + ")",
+            TYPE_NUMBER_NAN
+          );
+				} else if (node.kind === (exId + ".product")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" * ") + ")",
+            TYPE_NUMBER_NAN
+          );
+				} else if (node.kind === (exId + ".divide")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" / ") + ")",
+            TYPE_NUMBER_NAN
+          );
+				} else if (node.kind === (exId + ".divide")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" / ") + ")",
+            TYPE_NUMBER_NAN
+          );
+				} else if (node.kind === (exId + ".and")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asBoolean()).join(" && ") + ")",
+            TYPE_BOOLEAN
+          );
+				} else if (node.kind === (exId + ".or")) {
+					return new TypedInput(
+						"(" + node.args.map(n => this.descendInput(n).asBoolean()).join(" || ") + ")",
+            TYPE_BOOLEAN
+          );
+				} else if (node.kind === (exId + ".equal")) {
+					return new TypedInput(
+						"runtime.extendable_compareEq(compareEqual, " + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + ")",
+            TYPE_BOOLEAN
+          );
+				} else if (node.kind === (exId + ".greater")) {
+					return new TypedInput(
+						"runtime.extendable_compareEq(compareGreaterThan, " + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + ")",
+            TYPE_BOOLEAN
+          );
+				} else if (node.kind === (exId + ".less")) {
+					return new TypedInput(
+						"runtime.extendable_compareEq(compareLessThan, " + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + ")",
+            TYPE_BOOLEAN
+          );
+				} else if (node.kind === (exId + ".array")) {
+					return new TypedInput(
+						"JSON.stringify([" + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + "])",
+            TYPE_STRING
+          );
+				}
+				return original(node);
+			},
+		});
+	} catch (e) {
+		console.error("did garbo break stuff?", e);
+	}
+  
   class ExtendableBlocks {
     getInfo() {
       return {
         id: exId,
-        name: Scratch.translate("Extendable Blocks"),
+        name: Scratch.translate("Extendable Blocks (Compiled)"),
         menuIconURI: menuIconURI,
         blocks: [
           {
@@ -451,7 +701,7 @@
       return (
         args.mutation ||
         util.target.blocks.getBlock(util.thread.peekStack())?.mutation ||
-        Scratch.vm.runtime.flyoutBlocks.getBlock(util.thread.peekStack())
+        vm.runtime.flyoutBlocks.getBlock(util.thread.peekStack())
           ?.mutation
       );
     }
@@ -459,7 +709,6 @@
 
   // Based on https://github.com/Xeltalliv/extensions/blob/examples/examples/extension-colors.js
   // Add `mutator`
-  const runtime = Scratch.vm.runtime;
   // @ts-ignore
   const cbfsb = runtime._convertBlockForScratchBlocks.bind(runtime);
   // @ts-ignore
@@ -476,8 +725,8 @@
     const ScratchBlocks = window?.ScratchBlocks;
     if (!ScratchBlocks) return;
 
-    Scratch.vm.removeListener("EXTENSION_ADDED", patchSB);
-    Scratch.vm.removeListener("BLOCKSINFO_UPDATE", patchSB);
+    vm.removeListener("EXTENSION_ADDED", patchSB);
+    vm.removeListener("BLOCKSINFO_UPDATE", patchSB);
 
     const leftArrowIcon = `data:image/svg+xml;base64,PHN2ZyBkYXRhLW5hbWU9IkxheWVyIDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDEwIDEzIiB0cmFuc2Zvcm09InNjYWxlKC0xLCAxKSI+PHBhdGggZD0iTTMuNjUuMTQ1YTIuNDEgMi40MSAwIDAgMSAxLjcyLjcxbDMuOTIgMy45MmEyLjQ1IDIuNDUgMCAwIDEgMCAzLjQ1bC0zLjkyIDMuOTFhMi40MiAyLjQyIDAgMCAxLTEuNzIuNzIgMi40OCAyLjQ4IDAgMCAxLTEuNzMtLjcxYy0uMjQtLjI5LS43MS0uNzItLjcxLTUuNjUgMC00LjkzLjQ2LTUuMzkuNzEtNS42NGEyLjQ0IDIuNDQgMCAwIDEgMS43My0uNzF6IiBmaWxsPSIjMjMxZjIwIiBvcGFjaXR5PSIuMSIvPjxwYXRoIGQ9Ik04Ljk4NSA2LjUxYTEuNDMgMS40MyAwIDAgMS0uNDIgMWwtMy45MiAzLjk0YTEuNDQgMS40NCAwIDAgMS0yIDBjLS41Ni0uNTYtLjU2LTkuMzEgMC05Ljg3YTEuNDQgMS40NCAwIDAgMSAyIDBsMy45MiAzLjkyYTEuNDMgMS40MyAwIDAgMSAuNDIgMS4wMXoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=`;
     const rightArrowIcon = `data:image/svg+xml;base64,PHN2ZyBkYXRhLW5hbWU9IkxheWVyIDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDEwIDEzIj48cGF0aCBkPSJNMy42NS4xNDVhMi40MSAyLjQxIDAgMCAxIDEuNzIuNzFsMy45MiAzLjkyYTIuNDUgMi40NSAwIDAgMSAwIDMuNDVsLTMuOTIgMy45MWEyLjQyIDIuNDIgMCAwIDEtMS43Mi43MiAyLjQ4IDIuNDggMCAwIDEtMS43My0uNzFjLS4yNC0uMjktLjcxLS43Mi0uNzEtNS42NSAwLTQuOTMuNDYtNS4zOS43MS01LjY0YTIuNDQgMi40NCAwIDAgMSAxLjczLS43MXoiIGZpbGw9IiMyMzFmMjAiIG9wYWNpdHk9Ii4xIi8+PHBhdGggZD0iTTguOTg1IDYuNTFhMS40MyAxLjQzIDAgMCAxLS40MiAxbC0zLjkyIDMuOTRhMS40NCAxLjQ0IDAgMCAxLTIgMGMtLjU2LS41Ni0uNTYtOS4zMSAwLTkuODdhMS40NCAxLjQ0IDAgMCAxIDIgMGwzLjkyIDMuOTJhMS40MyAxLjQzIDAgMCAxIC40MiAxLjAxeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==`;
@@ -571,7 +820,7 @@
           if (hasEndBlocks) {
             for (const def of this.extendableDefsEnd) {
               const input = this.getInput(
-                this.getExtendableInput(def.id, prevEndIndex)
+                getExtendableInput(def.id, prevEndIndex)
               );
               if (input && input.connection) {
                 reattachMap[input.name] = def.id;
@@ -589,7 +838,7 @@
 
               let name = input.name;
               if (reattachMap[name]) {
-                name = this.getExtendableInput(
+                name = getExtendableInput(
                   reattachMap[name],
                   this.inputCount + hasStartBlocks
                 );
@@ -693,10 +942,10 @@
 
         // Removes unused inputs from the VM
         cleanInputs() {
-          const target = Scratch.vm.editingTarget;
+          const target = vm.editingTarget;
           if (!target) return;
           const blocks = this.isInFlyout
-            ? Scratch.vm.runtime.flyoutBlocks
+            ? vm.runtime.flyoutBlocks
             : target.blocks;
           const vmBlock = blocks.getBlock(this.id);
           if (!vmBlock) return;
@@ -716,23 +965,9 @@
           }
         },
 
-        // Gets an argument name for a prefix + index.
-        getExtendableInput(prefix, index) {
-          let id = prefix;
-          // Special handling for substacks,
-          // as their names matter for execution
-          if (prefix === "SUBSTACK") {
-            index += 1;
-            if (index > 1) id += index;
-          } else {
-            id += index;
-          }
-          return id;
-        },
-
         // The internal create input function.
         addInput_(def, i, connectionMap = null) {
-          const id = this.getExtendableInput(def.id, i);
+          const id = getExtendableInput(def.id, i);
           const input = this.appendInput_(def.type, id);
           if (def.type === ScratchBlocks.DUMMY_INPUT) {
             input.appendField(def.check);
@@ -773,7 +1008,7 @@
 
           for (const def of this.extendableDefs) {
             this.removeInput(
-              this.getExtendableInput(def.id, this.inputCount + plusInputs)
+              getExtendableInput(def.id, this.inputCount + plusInputs)
             );
           }
           this.updateDisplay_();
@@ -1197,7 +1432,7 @@
     // HACK: fixes the flyout, also with dynamic enable/disable addons
     const ogInitSvg = ScratchBlocks.BlockSvg.prototype.initSvg;
     ScratchBlocks.BlockSvg.prototype.initSvg = function () {
-      if (this.getExtendableInput && !this.extendableUpdatedDisplay) {
+      if (this.isExtendableInput && !this.extendableUpdatedDisplay) {
         this.updateDisplay_();
       }
       return ogInitSvg.call(this);
@@ -1206,8 +1441,8 @@
 
   // https://github.com/LilyMakesThings/extensions/blob/5b9ce572683e403933cab3b23c4a9bbb2a08ecf9/extensions/Lily/Dictionaries.js#L37C1-L45
   if (!("scaffolding" in window)) {
-    Scratch.vm.on("EXTENSION_ADDED", patchSB);
-    Scratch.vm.on("BLOCKSINFO_UPDATE", patchSB);
+    vm.on("EXTENSION_ADDED", patchSB);
+    vm.on("BLOCKSINFO_UPDATE", patchSB);
   }
 
   // @ts-ignore
