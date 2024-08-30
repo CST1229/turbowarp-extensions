@@ -18,46 +18,65 @@
 
   const vm = Scratch.vm;
   const runtime = vm.runtime;
-  
-	const patch = (obj, functions) => {
-		for (const name in functions) {
-			const original = obj[name];
-			if (original) {
-				obj[name] = function(...args) {
-					const callOriginal = (...args) => original.call(this, ...args);
-					return functions[name].call(this, callOriginal, ...args);
-				};
-			} else {
-				obj[name] = function (...args) {
-					return functions[name].call(this, () => {}, ...args);
-				}
-			}
-		}
-	}
+
+  const patch = (obj, functions) => {
+    for (const name in functions) {
+      const original = obj[name];
+      if (original) {
+        obj[name] = function (...args) {
+          const callOriginal = (...args) => original.call(this, ...args);
+          return functions[name].call(this, callOriginal, ...args);
+        };
+      } else {
+        obj[name] = function (...args) {
+          return functions[name].call(this, () => {}, ...args);
+        };
+      }
+    }
+  };
 
   function getExtendableInput(prefix, index) {
     // Special handling for substacks,
     // as their names matter for execution
     if (prefix === "SUBSTACK") {
-      return index > 0 ? (prefix + (index + 1)) : prefix;
+      return index > 0 ? prefix + (index + 1) : prefix;
     }
     return prefix + index;
   }
 
-	try {
+  try {
     // @ts-ignore
-		const compilerExports = vm.exports.i_will_not_ask_for_help_when_these_break();
-		const {JSGenerator, ScriptTreeGenerator} = compilerExports;
-		const {Frame, TypedInput, TYPE_UNKNOWN, TYPE_STRING, TYPE_BOOLEAN, TYPE_NUMBER_NAN} = JSGenerator.unstable_exports;
-		
-		//const {Thread} = vm.exports;
-		
-    const descendExtendable = (that, block, extraInputs = 0, argName = "ARG") => {
-      return new Array(+block.mutation.inputcount + extraInputs).fill().map((_, i) => that.descendInputOfBlock(block, argName + i))
-    }
+    const compilerExports =
+      vm.exports.i_will_not_ask_for_help_when_these_break();
+    const { JSGenerator, ScriptTreeGenerator } = compilerExports;
+    const {
+      Frame,
+      TypedInput,
+      TYPE_UNKNOWN,
+      TYPE_STRING,
+      TYPE_BOOLEAN,
+      TYPE_NUMBER_NAN,
+    } = JSGenerator.unstable_exports;
+
+    //const {Thread} = vm.exports;
+
+    const descendExtendable = (
+      that,
+      block,
+      extraInputs = 0,
+      argName = "ARG"
+    ) => {
+      return new Array(+block.mutation.inputcount + extraInputs)
+        .fill()
+        .map((_, i) => that.descendInputOfBlock(block, argName + i));
+    };
     const descendExtendableSubstack = (that, block, extraInputs = 0) => {
-      return new Array(+block.mutation.inputcount + extraInputs).fill().map((_, i) => that.descendSubstack(block, getExtendableInput("SUBSTACK", i)))
-    }
+      return new Array(+block.mutation.inputcount + extraInputs)
+        .fill()
+        .map((_, i) =>
+          that.descendSubstack(block, getExtendableInput("SUBSTACK", i))
+        );
+    };
 
     // @ts-ignore
     vm.runtime.extendable_compareEq = (compare, ...args) => {
@@ -65,207 +84,256 @@
         if (!compare(args[i], args[i + 1])) return false;
       }
       return true;
-    }
+    };
 
-		patch(ScriptTreeGenerator.prototype, {
-			descendStackedBlock(original, block) {
-				if (block.opcode === (exId + "_runBranch")) {
-					return {
-						kind: exId + ".runBranch",
+    patch(ScriptTreeGenerator.prototype, {
+      descendStackedBlock(original, block) {
+        if (block.opcode === exId + "_runBranch") {
+          return {
+            kind: exId + ".runBranch",
             branch: this.descendInputOfBlock(block, "BRANCH"),
             substacks: descendExtendableSubstack(this, block),
-					};
-				} else if (block.opcode === (exId + "_extendIf")) {
-					return {
-						kind: exId + ".if",
+          };
+        } else if (block.opcode === exId + "_extendIf") {
+          return {
+            kind: exId + ".if",
             conditions: descendExtendable(this, block, 1, "CONDITION"),
             substacks: descendExtendableSubstack(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendIfElse")) {
-					return {
-						kind: exId + ".ifelse",
+          };
+        } else if (block.opcode === exId + "_extendIfElse") {
+          return {
+            kind: exId + ".ifelse",
             conditions: descendExtendable(this, block, 1, "CONDITION"),
             substacks: descendExtendableSubstack(this, block, 2),
-					};
-				} else if (block.opcode === (exId + "_extendSwitch")) {
-					return {
-						kind: exId + ".switch",
+          };
+        } else if (block.opcode === exId + "_extendSwitch") {
+          return {
+            kind: exId + ".switch",
             value: this.descendInputOfBlock(block, "VALUE"),
             cases: descendExtendable(this, block, 0, "CASE_VALUE"),
             substacks: descendExtendableSubstack(this, block, 1),
-					};
-				}
+          };
+        }
         return original(block);
-			},
-			descendInput(original, block) {
-				if (block.opcode === (exId + "_extendJoin")) {
-					return {
-						kind: exId + ".join",
+      },
+      descendInput(original, block) {
+        if (block.opcode === exId + "_extendJoin") {
+          return {
+            kind: exId + ".join",
             args: descendExtendable(this, block),
-					};
-				} else if (block.opcode === (exId + "_extendSum")) {
-					return {
-						kind: exId + ".sum",
+          };
+        } else if (block.opcode === exId + "_extendSum") {
+          return {
+            kind: exId + ".sum",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendMinus")) {
-					return {
-						kind: exId + ".minus",
+          };
+        } else if (block.opcode === exId + "_extendMinus") {
+          return {
+            kind: exId + ".minus",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendProduct")) {
-					return {
-						kind: exId + ".product",
+          };
+        } else if (block.opcode === exId + "_extendProduct") {
+          return {
+            kind: exId + ".product",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendDivide")) {
-					return {
-						kind: exId + ".divide",
+          };
+        } else if (block.opcode === exId + "_extendDivide") {
+          return {
+            kind: exId + ".divide",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendAnd")) {
-					return {
-						kind: exId + ".and",
+          };
+        } else if (block.opcode === exId + "_extendAnd") {
+          return {
+            kind: exId + ".and",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendOr")) {
-					return {
-						kind: exId + ".or",
+          };
+        } else if (block.opcode === exId + "_extendOr") {
+          return {
+            kind: exId + ".or",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendEqual")) {
-					return {
-						kind: exId + ".equal",
+          };
+        } else if (block.opcode === exId + "_extendEqual") {
+          return {
+            kind: exId + ".equal",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendGreater")) {
-					return {
-						kind: exId + ".greater",
+          };
+        } else if (block.opcode === exId + "_extendGreater") {
+          return {
+            kind: exId + ".greater",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendLess")) {
-					return {
-						kind: exId + ".less",
+          };
+        } else if (block.opcode === exId + "_extendLess") {
+          return {
+            kind: exId + ".less",
             args: descendExtendable(this, block, 1),
-					};
-				} else if (block.opcode === (exId + "_extendArray")) {
-					return {
-						kind: exId + ".array",
+          };
+        } else if (block.opcode === exId + "_extendArray") {
+          return {
+            kind: exId + ".array",
             args: descendExtendable(this, block),
-					};
-				}
-				return original(block);
-			},
-		});
-		
-		patch(JSGenerator.prototype, {
-			descendStackedBlock(original, node) {
-				if (node.kind === (exId + ".runBranch")) {
-					this.source += `switch (${this.descendInput(node.branch).asNumber()}) {\n`;
+          };
+        }
+        return original(block);
+      },
+    });
+
+    patch(JSGenerator.prototype, {
+      descendStackedBlock(original, node) {
+        if (node.kind === exId + ".runBranch") {
+          this.source += `switch (${this.descendInput(node.branch).asNumber()}) {\n`;
           for (let i = 0; i < node.substacks.length; i++) {
             this.source += `case ${i + 1}: {\n`;
             this.descendStack(node.substacks[i], new Frame(false));
             this.source += `break;}\n`;
           }
-					this.source += `}\n`;
-				} else if (node.kind === (exId + ".if") || node.kind === (exId + ".ifelse")) {
+          this.source += `}\n`;
+        } else if (
+          node.kind === exId + ".if" ||
+          node.kind === exId + ".ifelse"
+        ) {
           for (let i = 0; i < node.conditions.length; i++) {
-            if (i > 0) this.source += "else "
+            if (i > 0) this.source += "else ";
             this.source += `if (${this.descendInput(node.conditions[i]).asBoolean()}) {\n`;
             this.descendStack(node.substacks[i], new Frame(false));
             this.source += `}\n`;
           }
-          if (node.kind === (exId + ".ifelse")) {
+          if (node.kind === exId + ".ifelse") {
             this.source += `else {\n`;
-            this.descendStack(node.substacks[node.conditions.length], new Frame(false));
+            this.descendStack(
+              node.substacks[node.conditions.length],
+              new Frame(false)
+            );
             this.source += `}\n`;
           }
-				} else if (node.kind === (exId + ".switch")) {
+        } else if (node.kind === exId + ".switch") {
           this.source += `switch (${this.descendInput(node.value).asSafe()}) {\n`;
 
           for (let i = 0; i < node.cases.length; i++) {
-            this.source += `case (${this.descendInput(node.cases[i]).asSafe()}): {\n`
+            this.source += `case (${this.descendInput(node.cases[i]).asSafe()}): {\n`;
             this.descendStack(node.substacks[i], new Frame(false));
             this.source += `break;}\n`;
           }
-          this.source += `default: {\n`
-          this.descendStack(node.substacks[node.cases.length], new Frame(false));
+          this.source += `default: {\n`;
+          this.descendStack(
+            node.substacks[node.cases.length],
+            new Frame(false)
+          );
           this.source += `break;}\n`;
 
           this.source += `}\n`;
-				} else {
-					original(node);
-				}
-			},
-			descendInput(original, node) {
-				if (node.kind === (exId + ".join")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asString()).join(" + ") + ")",
+        } else {
+          original(node);
+        }
+      },
+      descendInput(original, node) {
+        if (node.kind === exId + ".join") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asString())
+                .join(" + ") +
+              ")",
             TYPE_STRING
           );
-				} else if (node.kind === (exId + ".sum")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" + ") + ")",
+        } else if (node.kind === exId + ".sum") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asNumber())
+                .join(" + ") +
+              ")",
             TYPE_NUMBER_NAN
           );
-				} else if (node.kind === (exId + ".minus")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" - ") + ")",
+        } else if (node.kind === exId + ".minus") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asNumber())
+                .join(" - ") +
+              ")",
             TYPE_NUMBER_NAN
           );
-				} else if (node.kind === (exId + ".product")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" * ") + ")",
+        } else if (node.kind === exId + ".product") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asNumber())
+                .join(" * ") +
+              ")",
             TYPE_NUMBER_NAN
           );
-				} else if (node.kind === (exId + ".divide")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" / ") + ")",
+        } else if (node.kind === exId + ".divide") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asNumber())
+                .join(" / ") +
+              ")",
             TYPE_NUMBER_NAN
           );
-				} else if (node.kind === (exId + ".divide")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asNumber()).join(" / ") + ")",
+        } else if (node.kind === exId + ".divide") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asNumber())
+                .join(" / ") +
+              ")",
             TYPE_NUMBER_NAN
           );
-				} else if (node.kind === (exId + ".and")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asBoolean()).join(" && ") + ")",
+        } else if (node.kind === exId + ".and") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asBoolean())
+                .join(" && ") +
+              ")",
             TYPE_BOOLEAN
           );
-				} else if (node.kind === (exId + ".or")) {
-					return new TypedInput(
-						"(" + node.args.map(n => this.descendInput(n).asBoolean()).join(" || ") + ")",
+        } else if (node.kind === exId + ".or") {
+          return new TypedInput(
+            "(" +
+              node.args
+                .map((n) => this.descendInput(n).asBoolean())
+                .join(" || ") +
+              ")",
             TYPE_BOOLEAN
           );
-				} else if (node.kind === (exId + ".equal")) {
-					return new TypedInput(
-						"runtime.extendable_compareEq(compareEqual, " + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + ")",
+        } else if (node.kind === exId + ".equal") {
+          return new TypedInput(
+            "runtime.extendable_compareEq(compareEqual, " +
+              node.args.map((n) => this.descendInput(n).asSafe()).join(", ") +
+              ")",
             TYPE_BOOLEAN
           );
-				} else if (node.kind === (exId + ".greater")) {
-					return new TypedInput(
-						"runtime.extendable_compareEq(compareGreaterThan, " + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + ")",
+        } else if (node.kind === exId + ".greater") {
+          return new TypedInput(
+            "runtime.extendable_compareEq(compareGreaterThan, " +
+              node.args.map((n) => this.descendInput(n).asSafe()).join(", ") +
+              ")",
             TYPE_BOOLEAN
           );
-				} else if (node.kind === (exId + ".less")) {
-					return new TypedInput(
-						"runtime.extendable_compareEq(compareLessThan, " + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + ")",
+        } else if (node.kind === exId + ".less") {
+          return new TypedInput(
+            "runtime.extendable_compareEq(compareLessThan, " +
+              node.args.map((n) => this.descendInput(n).asSafe()).join(", ") +
+              ")",
             TYPE_BOOLEAN
           );
-				} else if (node.kind === (exId + ".array")) {
-					return new TypedInput(
-						"JSON.stringify([" + node.args.map(n => this.descendInput(n).asSafe()).join(", ") + "])",
+        } else if (node.kind === exId + ".array") {
+          return new TypedInput(
+            "JSON.stringify([" +
+              node.args.map((n) => this.descendInput(n).asSafe()).join(", ") +
+              "])",
             TYPE_STRING
           );
-				}
-				return original(node);
-			},
-		});
-	} catch (e) {
-		console.error("did garbo break stuff?", e);
-	}
-  
+        }
+        return original(node);
+      },
+    });
+  } catch (e) {
+    console.error("did garbo break stuff?", e);
+  }
+
   class ExtendableBlocks {
     getInfo() {
       return {
@@ -701,8 +769,7 @@
       return (
         args.mutation ||
         util.target.blocks.getBlock(util.thread.peekStack())?.mutation ||
-        vm.runtime.flyoutBlocks.getBlock(util.thread.peekStack())
-          ?.mutation
+        vm.runtime.flyoutBlocks.getBlock(util.thread.peekStack())?.mutation
       );
     }
   }
