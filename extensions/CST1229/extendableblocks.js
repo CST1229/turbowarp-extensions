@@ -656,7 +656,6 @@
       const prefix = "ARG";
       const mutation = this.getCurrentMutation(args, util);
       const inputCount = Scratch.Cast.toNumber(mutation?.inputcount);
-      console.log(inputCount);
       const joiner = Scratch.Cast.toString(args[prefix + inputCount]);
       if (inputCount <= 0) return "";
 
@@ -676,7 +675,7 @@
 
       const prefix = "ARG";
       for (let i = 0; i < inputCount + 1; i++) {
-        if (!args[prefix + i]) return false;
+        if (!Scratch.Cast.toBoolean(args[prefix + i])) return false;
       }
       return true;
     }
@@ -687,7 +686,7 @@
 
       const prefix = "ARG";
       for (let i = 0; i < inputCount + 1; i++) {
-        if (args[prefix + i]) return true;
+        if (Scratch.Cast.toBoolean(args[prefix + i])) return true;
       }
       return false;
     }
