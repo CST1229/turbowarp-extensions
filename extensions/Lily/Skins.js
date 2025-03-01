@@ -1,6 +1,6 @@
 // Name: Skins
 // ID: lmsSkins
-// Description: Have your sprites render as other images or costumes.
+// Description: Create and show temporary costumes from any image.
 // By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
 // License: MIT AND LGPL-3.0
 

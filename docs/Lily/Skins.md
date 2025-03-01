@@ -1,10 +1,12 @@
 # Skins
 
-This extension allows you to load and display images onto sprites, as Skins.
+This extension allows you to load and display images onto sprites, as skins.
 
-In this extension, a "Skin" is an image that can replace what a sprite looks like. 
+In this extension, a "skin" is an image that can replace what a sprite looks like, acting like a costume.
 
-Unlike costumes, Skins are not loaded when the project is opened. Instead, Skins are loaded with blocks as the project is running.
+However, unlike costumes, skins are not loaded when the project is opened. don't show up in the editor's "Costumes" tab and aren't saved with the project. Instead, they're loaded with blocks as the project is running, used also with blocks, and get deleted when you reload the project.
+
+This can be useful if you only need an image temporarily during the project's runtime, for example if you want to show user-made images from the internet.
 
 ## Loading Skins
 
