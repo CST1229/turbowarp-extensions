@@ -722,7 +722,9 @@
       if (variables.length > 0) {
         return variables;
       } else {
-        return [{ text: "", value: "" }];
+        // With a value of "", this text will show up in the dropdown, but not on the block.
+        // This makes the block palette slightly cleaner
+        return [{ text: "[no sprite-only variables]", value: "" }];
       }
     }
   }
