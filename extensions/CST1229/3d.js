@@ -4,8 +4,8 @@
 // By: CST1229 <https://scratch.mit.edu/users/CST1229/>
 // License: MPL-2.0
 
-// OFFICIAL DOWNLOAD: https://raw.githubusercontent.com/CST1229/turbowarp-extensions/3d/extensions/CST1229/3d.js
-// Version 0.1
+// OFFICIAL DOWNLOAD AT: https://cst1229.eu.org/extensions
+// Version 0.1a
 
 // Special thanks:
 // Drago NrxThulitech Cuven: some bug finding
@@ -40,6 +40,14 @@
     - world light blocks (direction/disable/flat/color/intensity)
   
   - WHEN RELEASING, DATA-URLIFY THREEJS
+*/
+
+/*
+
+Version 0.1a:
+- Added https://cst1229.eu.org/extensions to links
+Version 0.1:
+- (Added version number. There were revisions before this btw)
 */
 
 (async function (Scratch) {
