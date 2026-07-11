@@ -4,8 +4,12 @@
 // By: CST1229 <https://scratch.mit.edu/users/CST1229/>
 // License: MPL-2.0
 
+// !!! Make sure to note a comment if you (someone other than CST) modify this extension
+// !!! (in order to prevent people from mistaking it for an official version)!
+
 // OFFICIAL DOWNLOAD AT: https://cst1229.eu.org/extensions
-// Version 0.1a
+// Version 0.1b
+
 
 // Special thanks:
 // Drago NrxThulitech Cuven: some bug finding
